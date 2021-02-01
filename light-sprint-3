@@ -1,0 +1,50 @@
+// Code modified from original Adafruit NeoPixel example
+
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+#include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#endif
+
+#define LED_PIN     6
+#define LED_COUNT   3
+#define BRIGHTNESS  25
+Adafruit_NeoPixel pixels(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
+
+void setup() {
+  pixels.begin();
+  pixels.show();
+  pixels.setBrightness(BRIGHTNESS);
+}
+
+void loop() {
+  rainbowFade2White(5, 25, 0.5); 
+}
+
+void rainbowFade2White(int wait, int rainbowLoops, int whiteLoops) {
+  int fadeVal=0, fadeMax=100;
+  
+  for(uint32_t firstPixelHue = 0; firstPixelHue < rainbowLoops*65536;
+    firstPixelHue += 256) {
+    for(int i=0; i<pixels.numPixels(); i++) {
+      uint32_t pixelHue = firstPixelHue + (i * 65536L / pixels.numPixels());
+      pixels.setPixelColor(i, pixels.gamma32(pixels.ColorHSV(pixelHue, 255,
+        255 * fadeVal / fadeMax)));
+    }
+
+    pixels.show();
+    delay(wait);
+    if(firstPixelHue < 65536) {
+      fadeVal = fadeMax;
+    }
+  }
+
+  for(int k=0; k<whiteLoops; k++) {
+    delay(0); // Pause 1 second
+    for(int j=255; j>=0; j--) {
+      pixels.fill(pixels.Color(0, 0, 0, pixels.gamma8(j)));
+      pixels.show();
+    }
+  }
+
+  delay(0);
+}
