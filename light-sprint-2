@@ -1,0 +1,81 @@
+int buttonColour=13;
+#define BLUE 11
+#define GREEN 10
+#define RED 9
+int mode = 0;
+
+void setup() {
+  pinMode (RED, OUTPUT);
+  pinMode (GREEN, OUTPUT);
+  pinMode (BLUE, OUTPUT);
+  pinMode (buttonColour, INPUT_PULLUP);
+Serial.begin(9600);
+}
+
+void loop() {
+  if (digitalRead(buttonColour) == LOW) {
+    mode = mode + 1;
+    delay(400);
+  }
+
+  // off
+  if (mode == 0) {
+    analogWrite(BLUE, 0);
+    analogWrite(GREEN, 0);
+    analogWrite(RED, 0);
+  }
+
+    // red
+  if (mode == 1) {
+    analogWrite(BLUE, 0);
+    analogWrite(GREEN, 0);
+    analogWrite(RED, 255);    
+  }
+
+    // green
+  if (mode == 2) {
+    analogWrite(BLUE, 0);
+    analogWrite(GREEN, 255);
+    analogWrite(RED, 255);
+  }
+
+    // blue
+  if (mode == 3) {
+    analogWrite(BLUE, 255);
+    analogWrite(GREEN, 0);
+    analogWrite(RED, 0);
+  }
+
+    // cyan
+  if (mode == 4) {
+    analogWrite(BLUE, 255);
+    analogWrite(GREEN, 255);
+    analogWrite(RED, 0);
+  }
+
+    // magenta
+  if (mode == 5) {
+    analogWrite(BLUE, 255);
+    analogWrite(GREEN, 0);
+    analogWrite(RED, 255);
+  }
+
+    // yellow
+  if (mode == 6) {
+    analogWrite(BLUE, 0);
+    analogWrite(GREEN, 255);
+    analogWrite(RED, 255);
+  }
+
+    // white
+  if (mode == 7) {
+    analogWrite(BLUE, 255);
+    analogWrite(GREEN, 255);
+    analogWrite(RED, 255);
+  }
+
+    // switch off
+  if (mode == 8) {
+    mode = 0;
+  }
+}
