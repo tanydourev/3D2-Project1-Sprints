@@ -1,0 +1,67 @@
+// Original code from
+// https://create.arduino.cc/projecthub/Kub_Luk/using-serial-monitor-to-control-servo-motor-cc1daf?ref=tag&ref_id=servo&offset=12
+// Modified by Tany Dourev
+
+#include <Servo.h>
+Servo myservo;
+int pos = 0;
+
+void setup() {
+
+  Serial.begin(9600);
+  
+  while (!Serial);
+    Serial.println("-------------------------");
+    Serial.println("Serial monitor is loading....");
+    
+    delay(1000);
+    
+    Serial.println("Serial monitor loaded succesfully.");
+    Serial.println("-------------------------");
+  
+  myservo.attach(9);
+
+  Serial.println("Calibrating servo...");
+  
+  for(pos = 0; pos <= 180; pos += 1)
+  myservo.write(0);
+  
+  delay(1000);
+  
+  myservo.write(180);
+  
+  delay(1000);
+  
+  myservo.write(90);
+  
+  delay(1000);
+  
+  Serial.println("Servo calibrated.");
+  Serial.println("-------------------------");
+  Serial.println("Use the command line to turn the servo. Type any number between 10 and 169.");
+  Serial.println("-------------------------");
+}
+
+void loop() {
+  
+  for(pos = 0; pos <= 180; pos += 1)
+  if (Serial.available()) {
+    int state = Serial.parseInt();
+    
+    if (state < 10) {
+      Serial.print(">");
+      Serial.println(state);
+      Serial.println("Number too low, please try a higher value.");
+    }
+
+    if (state >= 10 && state < 170) {
+      Serial.print(">");
+      Serial.println(state);
+      Serial.print("Turning servo to ");
+      Serial.print(state);
+      Serial.println(" degrees.");
+      
+      myservo.write(state);
+    }
+  }
+}
